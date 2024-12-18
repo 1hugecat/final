@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Clicker Game</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            margin: 0;
+            padding: 0;
+            color: #fff;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            justify-content: center;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-top: 50px;
+            color: #fff;
+        }
+
+        /* Go Back Button styling (top-right corner) */
+        .goBackContainer {
+    position: fixed;
+    top: 20px;
+    right: 10px;
+}
+
+        .goBackButton {
+          
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .goBackButton:hover {
+            background-color: #e53935;
+        }
+
+        /* Center the container of the game */
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* Cookie button styling */
+        .cookie-button {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: #e1c29f;
+            background-image: url('https://www.clipartkey.com/mpngs/m/181-1812643_cookie-icon-png-image-transparent-png.png'); /* Cookie image URL */
+            background-size: cover;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease-in-out;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .cookie-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .cookie-button::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #6f4e37; /* Chocolate chip color */
+            border-radius: 50%;
+            top: 20px;
+            left: 30px;
+        }
+
+        .cookie-button::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background-color: #6f4e37; /* Chocolate chip color */
+            border-radius: 50%;
+            bottom: 25px;
+            right: 25px;
+        }
+
+        /* Stats container */
+        .stats {
+            margin-top: 40px;
+            font-size: 1.5em;
+        }
+
+        .stats p {
+            margin: 10px 0;
+        }
+
+        .upgrade, .auto-upgrade, .ultimate-upgrade {
+            margin-top: 30px;
+        }
+
+        .upgrade-button, .ultimate-upgrade-button, .auto-upgrade-button, .multiple-upgrade-button {
+            background-color: #f4a261;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .upgrade-button:hover, .ultimate-upgrade-button:hover, .auto-upgrade-button:hover, .multiple-upgrade-button:hover {
+            background-color: #e76f51;
+            transform: scale(1.05);
+        }
+
+        .multiple-buy-input input {
+            padding: 10px;
+            font-size: 1.1em;
+            width: 60px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #fff;
+            color: #333;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .multiple-buy-input button {
+            padding: 10px 20px;
+            background-color: #264653;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .multiple-buy-input button:hover {
+            background-color: #f4a261;
+        }
+
+        .ultimate-upgrade-button {
+            background-color: #f72585;
+            font-size: 1.5em;
+            padding: 15px 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .ultimate-upgrade-button:hover {
+            background-color: #ff006e;
+        }
+
+        .footer {
+            background-color: #333;
+            padding: 10px;
+            font-size: 1em;
+            color: #fff;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Go Back Button -->
+    <div class="goBackContainer">
+      <a href="../index.html" class="goBackButton">Home Page</a>
+  </div>
+  
+    
+
+    <div class="game-container">
+        <h1>Cookie Clicker</h1>
+        <button class="cookie-button" id="cookieButton"></button>
+
+        <div class="stats">
+            <p>Cookies: <span id="cookieCount">0</span></p>
+            <p>Cookies per click: <span id="cookiesPerClick">1</span></p>
+            <p>Cookies per second: <span id="cookiesPerSecond">0</span></p>
+        </div>
+
+        <div class="upgrade">
+            <button id="upgradeButton" class="upgrade-button">Upgrade Cookies per Click (Cost: 50 cookies)</button>
+            <div class="multiple-buy-input">
+                <input type="number" id="upgradeQuantity" placeholder="Quantity" min="1">
+                <button id="multipleUpgradeButton" class="multiple-upgrade-button">Buy Multiple Upgrades</button>
+            </div>
+        </div>
+
+        <div class="auto-upgrade">
+            <button id="autoUpgradeButton" class="auto-upgrade-button">Buy Auto Clicker (Cost: 100 cookies)</button>
+            <div class="multiple-buy-input">
+                <input type="number" id="autoUpgradeQuantity" placeholder="Quantity" min="1">
+                <button id="multipleAutoUpgradeButton" class="multiple-upgrade-button">Buy Multiple Auto Clickers</button>
+            </div>
+        </div>
+
+        <div class="ultimate-upgrade">
+            <button id="ultimateUpgradeButton" class="ultimate-upgrade-button">Ultimate Upgrade (Cost: 1,000,000 cookies)</button>
+        </div>
+
+        <div class="footer">
+            <p>Enjoy the game! Cookies don't grow on trees! 🍪</p>
+        </div>
+    </div>
+
+    <script>
+        // Game variables
+        let cookies = 0;
+        let cookiesPerClick = 1;
+        let cookiesPerSecond = 0;
+        let autoClickers = 0;
+
+        const cookieButton = document.getElementById('cookieButton');
+        const cookieCount = document.getElementById('cookieCount');
+        const cookiesPerClickDisplay = document.getElementById('cookiesPerClick');
+        const cookiesPerSecondDisplay = document.getElementById('cookiesPerSecond');
+        const upgradeButton = document.getElementById('upgradeButton');
+        const autoUpgradeButton = document.getElementById('autoUpgradeButton');
+        const ultimateUpgradeButton = document.getElementById('ultimateUpgradeButton');
+        const multipleUpgradeButton = document.getElementById('multipleUpgradeButton');
+        const multipleAutoUpgradeButton = document.getElementById('multipleAutoUpgradeButton');
+        const upgradeQuantity = document.getElementById('upgradeQuantity');
+        const autoUpgradeQuantity = document.getElementById('autoUpgradeQuantity');
+
+        // Function to go back to index.html
+        function goBackToIndex() {
+            window.location.href = "index.html";  // Change the path if needed
+        }
+
+        // Function to update the cookie count and stats display with commas
+        function updateCookieCount() {
+            cookieCount.textContent = cookies.toLocaleString();
+            cookiesPerClickDisplay.textContent = cookiesPerClick.toLocaleString();
+            cookiesPerSecondDisplay.textContent = cookiesPerSecond.toLocaleString();
+        }
+
+        // Cookie click event
+        cookieButton.addEventListener('click', () => {
+            cookies += cookiesPerClick;
+            updateCookieCount();
+        });
+
+        // Upgrade cookies per click (single)
+        upgradeButton.addEventListener('click', () => {
+            const upgradeCost = 50;
+
+            if (cookies >= upgradeCost) {
+                cookies -= upgradeCost;
+                cookiesPerClick += 1;
+                updateCookieCount();
+            } else {
+                alert("You need more cookies to upgrade!");
+            }
+        });
+
+        // Multiple buy option for upgrading cookies per click
+        multipleUpgradeButton.addEventListener('click', () => {
+            const quantity = parseInt(upgradeQuantity.value) || 1;
+            const upgradeCost = 50;
+
+            const totalCost = upgradeCost * quantity;
+            if (cookies >= totalCost) {
+                cookies -= totalCost;
+                cookiesPerClick += quantity;
+                updateCookieCount();
+            } else {
+                alert("You don't have enough cookies for that many upgrades!");
+            }
+        });
+
+        // Buy auto clicker (single)
+        autoUpgradeButton.addEventListener('click', () => {
+            const autoUpgradeCost = 100;
+
+            if (cookies >= autoUpgradeCost) {
+                cookies -= autoUpgradeCost;
+                autoClickers += 1;
+                cookiesPerSecond = autoClickers;
+                updateCookieCount();
+            } else {
+                alert("You need more cookies to buy an auto clicker!");
+            }
+        });
+
+        // Multiple buy option for auto clickers
+        multipleAutoUpgradeButton.addEventListener('click', () => {
+            const quantity = parseInt(autoUpgradeQuantity.value) || 1;
+            const autoUpgradeCost = 100;
+
+            const totalCost = autoUpgradeCost * quantity;
+            if (cookies >= totalCost) {
+                cookies -= totalCost;
+                autoClickers += quantity;
+                cookiesPerSecond = autoClickers;
+                updateCookieCount();
+            } else {
+                alert("You don't have enough cookies for that many auto clickers!");
+            }
+        });
+
+        // Ultimate upgrade (leads to link)
+        ultimateUpgradeButton.addEventListener('click', () => {
+            const ultimateUpgradeCost = 1000000;
+
+            if (cookies >= ultimateUpgradeCost) {
+                cookies -= ultimateUpgradeCost;
+                updateCookieCount();
+                window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+            } else {
+                alert("You need 1,000,000 cookies for the ultimate upgrade!");
+            }
+        });
+
+        // Update cookies per second every second (auto-clicker functionality)
+        setInterval(() => {
+            cookies += cookiesPerSecond;
+            updateCookieCount();
+        }, 1000);
+    </script>
+</body>
+</html>
